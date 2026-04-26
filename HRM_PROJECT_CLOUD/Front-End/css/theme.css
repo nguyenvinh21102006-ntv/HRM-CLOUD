@@ -1,0 +1,176 @@
+/* ========================================
+   HRM_PROJECT_CLOUD - Theme CSS
+   Hỗ trợ Dark, Light, và Auto theme
+   ======================================== */
+
+/* Dark Theme (Mặc định) */
+body.dark-theme {
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-card: #111111;
+    --bg-input: #1a1a1a;
+    --bg-hover: #222222;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #6c757d;
+    --border-color: #2a2a2a;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Theme */
+body.light-theme {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-input: #f8f9fa;
+    --bg-hover: #e9ecef;
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Theme Transition */
+body {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: all 0.15s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-hover);
+    transform: scale(1.02);
+}
+
+/* Auto Theme Detection */
+@media (prefers-color-scheme: dark) {
+    body.auto-theme {
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0a;
+        --bg-card: #111111;
+        --bg-input: #1a1a1a;
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+        --border-color: #2a2a2a;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body.auto-theme {
+        --bg-primary: #f8f9fa;
+        --bg-secondary: #ffffff;
+        --bg-card: #ffffff;
+        --bg-input: #f8f9fa;
+        --text-primary: #212529;
+        --text-secondary: #495057;
+        --border-color: #dee2e6;
+    }
+}
+
+/* Theme-specific Card Styles */
+body.dark-theme .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Theme-specific Table Styles */
+body.dark-theme .table {
+    background-color: var(--bg-secondary);
+}
+
+body.light-theme .table {
+    background-color: var(--bg-secondary);
+}
+
+/* Theme-specific Modal Styles */
+body.dark-theme .modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+body.light-theme .modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme-specific Dropdown Styles */
+body.dark-theme .dropdown-menu {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+body.light-theme .dropdown-menu {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Theme-specific Scrollbar */
+body.dark-theme ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+    background: #333333;
+}
+
+body.light-theme ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Theme-specific Input Focus */
+body.dark-theme .form-control:focus,
+body.dark-theme .form-select:focus {
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+body.light-theme .form-control:focus,
+body.light-theme .form-select:focus {
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Theme-specific Button Variants */
+body.dark-theme .btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+/* Theme-specific Alert */
+body.dark-theme .alert-info {
+    background-color: #0c5460;
+    border-color: #0a4b56;
+    color: #d1ecf1;
+}
+
+body.light-theme .alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}

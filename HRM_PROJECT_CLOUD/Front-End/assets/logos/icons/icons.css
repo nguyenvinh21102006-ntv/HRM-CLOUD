@@ -1,0 +1,67 @@
+/* icons.css - Định nghĩa icon classes sử dụng Unicode và emoji */
+
+/* Icon base class */
+.icon {
+    display: inline-block;
+    width: 1.2em;
+    text-align: center;
+    font-style: normal;
+}
+
+/* Navigation Icons */
+.icon-dashboard::before { content: "📊"; }
+.icon-employees::before { content: "👥"; }
+.icon-attendance::before { content: "⏱️"; }
+.icon-salary::before { content: "💰"; }
+.icon-history::before { content: "📜"; }
+.icon-admin::before { content: "⚙️"; }
+.icon-profile::before { content: "👤"; }
+.icon-logout::before { content: "🚪"; }
+.icon-login::before { content: "🔐"; }
+
+/* Action Icons */
+.icon-add::before { content: "➕"; }
+.icon-edit::before { content: "✏️"; }
+.icon-delete::before { content: "🗑️"; }
+.icon-save::before { content: "💾"; }
+.icon-search::before { content: "🔍"; }
+.icon-filter::before { content: "🔧"; }
+.icon-refresh::before { content: "🔄"; }
+.icon-export::before { content: "📎"; }
+.icon-print::before { content: "🖨️"; }
+
+/* Status Icons */
+.icon-success::before { content: "✅"; }
+.icon-error::before { content: "❌"; }
+.icon-warning::before { content: "⚠️"; }
+.icon-info::before { content: "ℹ️"; }
+
+/* Role Icons */
+.icon-admin-role::before { content: "⚙️"; }
+.icon-director-role::before { content: "👑"; }
+.icon-dept-head-role::before { content: "📁"; }
+.icon-team-leader-role::before { content: "👥"; }
+.icon-employee-role::before { content: "👤"; }
+
+/* Job Type Icons */
+.icon-office::before { content: "📄"; }
+.icon-sales::before { content: "📈"; }
+
+/* Theme Icons */
+.icon-dark::before { content: "🌙"; }
+.icon-light::before { content: "☀️"; }
+.icon-auto::before { content: "🔄"; }
+
+/* Size variants */
+.icon-sm { font-size: 12px; }
+.icon-md { font-size: 16px; }
+.icon-lg { font-size: 20px; }
+.icon-xl { font-size: 24px; }
+.icon-2xl { font-size: 32px; }
+
+/* Color variants */
+.icon-primary { color: var(--primary); }
+.icon-success { color: var(--success); }
+.icon-danger { color: var(--danger); }
+.icon-warning { color: var(--warning); }
+.icon-muted { color: var(--text-muted); }
