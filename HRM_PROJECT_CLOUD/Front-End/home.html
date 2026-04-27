@@ -381,6 +381,7 @@
 
                 document.getElementById('mySalaryDetail').innerHTML = `
                     <table class="table table-dark">
+                        <tr><th>Khoản mục</th><th>Số tiền</th></tr>
                         <tr><td>Lương cơ bản</td><td class="text-end">${formatCurrency(4500000)}</td></tr>
                         <tr><td>Hệ số lương (${currentUser.coefficient})</td><td class="text-end">${formatCurrency(4500000 * currentUser.coefficient)}</td></tr>
                         <tr><td>Thâm niên (${currentUser.seniorityYears} năm x 3%)</td><td class="text-end">${formatCurrency(seniorityBonus)}</td></tr>
@@ -510,7 +511,7 @@
             `).join('');
         }
 
-        // ============== EMPLOYEES MANAGEMENT (cho admin/trưởng phòng) ==============
+        // ============== EMPLOYEES MANAGEMENT (có tìm kiếm theo tên) ==============
         async function showEmployees() {
             if (!['admin', 'director', 'department_head'].includes(currentUser?.role)) {
                 showToast('Bạn không có quyền truy cập', 'error');
@@ -520,26 +521,46 @@
 
             const main = document.getElementById('mainContent');
             main.innerHTML = `
-                <div class="d-flex justify-content-between mb-3"><h3>👥 Danh sách nhân viên</h3><button class="btn btn-primary" onclick="openUserModal()">➕ Thêm nhân viên</button></div>
-                <div class="table-responsive"><table class="table table-dark"><thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Loại</th><th>Hệ số</th><th>Thao tác</th></td></thead><tbody id="usersTable"></tbody></table></div>
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h3 class="mb-0">👥 Danh sách nhân viên</h3>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="searchEmployeeInput" class="form-control bg-dark text-white border-secondary" placeholder="🔍 Tìm theo tên..." style="width: 250px;">
+                        <button class="btn btn-primary" onclick="openUserModal()">➕ Thêm nhân viên</button>
+                    </div>
+                </div>
+                <div class="table-responsive"><table class="table table-dark"><thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Loại</th><th>Hệ số</th><th>Thao tác</th></tr></thead><tbody id="usersTable"></tbody></table></div>
             `;
 
             if (usersList.length === 0) await loadUsers();
 
-            const tbody = document.getElementById('usersTable');
-            tbody.innerHTML = usersList.map((u, i) => `
-                <tr>
-                    <td>${i + 1}</td><td>${u.fullName}</td><td>${u.email}</td>
-                    <td><span class="role-badge role-${u.role}">${getRoleName(u.role)}</span></td>
-                    <td>${u.jobType === 'kinh_doanh' ? '📈 Kinh doanh' : '📄 Văn phòng'}</td>
-                    <td>${u.coefficient}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info" onclick="viewSalary('${u._id}')">💰</button>
-                        <button class="btn btn-sm btn-warning" onclick="editUser('${u._id}')">✏️</button>
-                        ${currentUser?.role === 'admin' ? `<button class="btn btn-sm btn-danger" onclick="deleteUser('${u._id}')">🗑️</button>` : ''}
-                    </td>
-                </tr>
-            `).join('');
+            // Hàm render bảng theo từ khóa
+            const renderEmployeeTable = (keyword = '') => {
+                const tbody = document.getElementById('usersTable');
+                if (!tbody) return;
+                const filtered = usersList.filter(u => u.fullName.toLowerCase().includes(keyword.toLowerCase()));
+                tbody.innerHTML = filtered.map((u, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${u.fullName}</td>
+                        <td>${u.email}</td>
+                        <td><span class="role-badge role-${u.role}">${getRoleName(u.role)}</span></td>
+                        <td>${u.jobType === 'kinh_doanh' ? '📈 Kinh doanh' : '📄 Văn phòng'}</td>
+                        <td>${u.coefficient}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick="viewSalary('${u._id}')">💰</button>
+                            <button class="btn btn-sm btn-warning" onclick="editUser('${u._id}')">✏️</button>
+                            ${currentUser?.role === 'admin' ? `<button class="btn btn-sm btn-danger" onclick="deleteUser('${u._id}')">🗑️</button>` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            // Gán sự kiện tìm kiếm
+            const searchInput = document.getElementById('searchEmployeeInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => renderEmployeeTable(e.target.value));
+            }
+            renderEmployeeTable('');
         }
 
         function openUserModal(id = null) {
