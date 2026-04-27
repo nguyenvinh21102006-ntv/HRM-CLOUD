@@ -28,8 +28,6 @@
         .theme-toggle { cursor: pointer; padding: 5px 12px; background-color: #1a1a1a; border-radius: 20px; }
         footer { border-top: 1px solid #333; }
         .btn-sm { margin: 2px; }
-        .search-input { background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 20px; padding: 8px 16px; width: 100%; max-width: 300px; }
-        .search-input:focus { background-color: #2a2a2a; color: #fff; outline: none; border-color: #007bff; }
     </style>
 </head>
 <body>
@@ -409,10 +407,7 @@
             `).join('');
         }
         
-        // ============== EMPLOYEES MANAGEMENT (có thêm tìm kiếm) ==============
-        // Biến lưu từ khóa tìm kiếm hiện tại
-        let currentSearchTerm = '';
-        
+        // ============== EMPLOYEES MANAGEMENT (cho admin/trưởng phòng) ==============
         async function showEmployees() {
             if (!['admin', 'director', 'department_head'].includes(currentUser?.role)) {
                 showToast('Bạn không có quyền truy cập', 'error');
@@ -420,64 +415,18 @@
                 return;
             }
             
-            // Đảm bảo danh sách nhân viên đã được tải
-            if (usersList.length === 0) await loadUsers();
-            
             const main = document.getElementById('mainContent');
             main.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h3>👥 Danh sách nhân viên</h3>
-                    <div class="d-flex gap-2">
-                        <input type="text" id="employeeSearchInput" class="search-input" placeholder="🔍 Tìm theo tên hoặc email ..." value="${currentSearchTerm}">
-                        <button class="btn btn-primary" onclick="openUserModal()">➕ Thêm nhân viên</button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-dark">
-                        <thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Loại</th><th>Hệ số</th><th>Thao tác</th></tr></thead>
-                        <tbody id="usersTable"></tbody>
-                    </table>
-                </div>
+                <div class="d-flex justify-content-between mb-3"><h3>👥 Danh sách nhân viên</h3><button class="btn btn-primary" onclick="openUserModal()">➕ Thêm nhân viên</button></div>
+                <div class="table-responsive"><table class="table table-dark"><thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Loại</th><th>Hệ số</th><th>Thao tác</th></td></thead><tbody id="usersTable"></tbody></table></div>
             `;
             
-            // Gắn sự kiện lọc khi gõ
-            const searchInput = document.getElementById('employeeSearchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    currentSearchTerm = e.target.value;
-                    renderFilteredUsers();
-                });
-            }
+            if (usersList.length === 0) await loadUsers();
             
-            // Hiển thị danh sách đã lọc
-            renderFilteredUsers();
-        }
-        
-        // Hàm lọc và render danh sách nhân viên
-        function renderFilteredUsers() {
             const tbody = document.getElementById('usersTable');
-            if (!tbody) return;
-            
-            // Lọc theo tên hoặc email (không phân biệt chữ hoa/thường)
-            const term = currentSearchTerm.trim().toLowerCase();
-            let filtered = [...usersList];
-            if (term !== '') {
-                filtered = usersList.filter(user => 
-                    user.fullName.toLowerCase().includes(term) || 
-                    user.email.toLowerCase().includes(term)
-                );
-            }
-            
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Không tìm thấy nhân viên nào</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = filtered.map((u, idx) => `
+            tbody.innerHTML = usersList.map((u, i) => `
                 <tr>
-                    <td>${idx+1}</td>
-                    <td>${escapeHtml(u.fullName)}</td>
-                    <td>${escapeHtml(u.email)}</td>
+                    <td>${i+1}</td><td>${u.fullName}</td><td>${u.email}</td>
                     <td><span class="role-badge role-${u.role}">${getRoleName(u.role)}</span></td>
                     <td>${u.jobType === 'kinh_doanh' ? '📈 Kinh doanh' : '📄 Văn phòng'}</td>
                     <td>${u.coefficient}</td>
@@ -488,19 +437,6 @@
                     </td>
                 </tr>
             `).join('');
-        }
-        
-        // Hàm đơn giản chống XSS khi hiển thị
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-                return c;
-            });
         }
         
         function openUserModal(id = null) {
@@ -536,7 +472,7 @@
                     document.getElementById('modalTitle').innerText = 'Sửa nhân viên';
                 }
             } else {
-                document.getElementById('userForm')?.reset();
+                document.getElementById('userForm').reset();
                 document.getElementById('userId').value = '';
                 document.getElementById('modalTitle').innerText = 'Thêm nhân viên';
             }
@@ -565,7 +501,6 @@
                 showToast(userId ? 'Cập nhật thành công' : 'Thêm thành công');
                 bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
                 await loadUsers();
-                // Giữ nguyên từ khóa tìm kiếm sau khi refresh
                 showEmployees();
                 addToHistory(userId ? 'cập nhật nhân viên' : 'thêm nhân viên', data);
             } else showToast('Lỗi khi lưu', 'error');
@@ -629,3 +564,4 @@
     </script>
 </body>
 </html>
+
