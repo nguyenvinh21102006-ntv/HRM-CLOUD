@@ -304,8 +304,8 @@
                 <div class="search-title">🔍 Tìm kiếm người dùng</div>
                 <div class="search-box">
                     <input type="text" id="searchInput" class="search-input"
-                        placeholder="Nhập HỌ TÊN hoặc EMAIL để tìm kiếm...">
-
+                        placeholder="Nhập HỌ TÊN, EMAIL hoặc SĐT để tìm kiếm...">
+                    
                     <select id="departmentSelect" class="department-select">
                         <option value="">Tất cả phòng ban</option>
                         <option value="Phòng Kỹ thuật">🔧 Phòng Kỹ thuật</option>
@@ -316,15 +316,16 @@
                         <option value="Phòng Hành chính">📋 Phòng Hành chính</option>
                         <option value="Phòng IT">💻 Phòng IT</option>
                     </select>
-
+                    
                     <button class="search-btn" onclick="searchUsers()">Tìm kiếm</button>
                     <button class="reset-btn" onclick="resetSearch()">Đặt lại</button>
                 </div>
                 <div class="search-hint">
                     <span>💡 Tìm theo tên: "Nguyễn Văn A"</span>
                     <span>📧 Tìm theo email: "example@company.com"</span>
+                    <span>📱 Tìm theo SĐT: "0912345678"</span>
                     <span>🏢 Lọc theo phòng ban: Chọn từ danh sách</span>
-                    <span>🔍 Có thể kết hợp cả hai</span>
+                    <span>🔍 Có thể kết hợp tất cả</span>
                 </div>
             </div>
 
@@ -344,7 +345,7 @@
                             <th>Số điện thoại</th>
                             <th>Phòng ban</th>
                             <th>Trạng thái</th>
-                    </thead>
+                        </thead>
                     <tbody id="userTableBody">
                         <tr class="empty-row">
                             <td colspan="5">
@@ -422,18 +423,19 @@
             });
         }
 
-        //search
+        // Chức năng tìm kiếm (tìm theo TÊN, EMAIL, SĐT và lọc theo PHÒNG BAN)
         function searchUsers() {
             const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
             const selectedDepartment = document.getElementById('departmentSelect').value;
 
             let filtered = [...allUsers];
 
-            // Lọc theo từ khóa (CHỈ tên HOẶC email - KHÔNG tìm theo số điện thoại)
+            // Lọc theo từ khóa (tên, email hoặc số điện thoại)
             if (keyword !== '') {
                 filtered = filtered.filter(user =>
                     (user.fullname && user.fullname.toLowerCase().includes(keyword)) ||
-                    (user.email && user.email.toLowerCase().includes(keyword))
+                    (user.email && user.email.toLowerCase().includes(keyword)) ||
+                    (user.phone && user.phone.includes(keyword))  // Tìm theo số điện thoại
                 );
             }
 
