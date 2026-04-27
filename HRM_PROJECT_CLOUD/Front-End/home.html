@@ -1,532 +1,631 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRM System - Quản lý nhân sự</title>
+    <title>HRM Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .logo p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Content */
-        .content {
-            padding: 30px;
-        }
-
-        /* Search Section */
-        .search-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .search-input {
-            flex: 2;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .department-select {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .department-select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .search-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .reset-btn {
-            padding: 12px 30px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .reset-btn:hover {
-            background: #5a6268;
-        }
-
-        .search-hint {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #666;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-hint span {
-            display: inline-block;
-            padding: 4px 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-        }
-
-        /* Stats */
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 0;
-        }
-
-        .total-users {
-            font-size: 16px;
-            color: #666;
-        }
-
-        .result-count {
-            font-size: 16px;
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        th,
-        td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        th {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        tbody tr:hover {
-            background: #f8f9fa;
-            transition: background 0.3s;
-        }
-
-        .empty-row td {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        /* Badge */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-active {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .badge-inactive {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #667eea;
-            font-size: 16px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-
-            .search-box {
-                flex-direction: column;
-            }
-
-            th,
-            td {
-                padding: 10px;
-                font-size: 14px;
-            }
-        }
+        body { background-color: #000; color: #fff; font-family: 'Segoe UI', sans-serif; }
+        .navbar, .sidebar, .card, footer { background-color: #0a0a0a !important; }
+        .navbar { border-bottom: 1px solid #333; }
+        .sidebar { border-right: 1px solid #333; min-height: calc(100vh - 56px); }
+        .nav-link { color: #ccc; cursor: pointer; padding: 10px 15px; border-radius: 8px; margin: 4px 8px; }
+        .nav-link:hover, .nav-link.active { background-color: #1a1a1a; color: #fff; }
+        .card { border: 1px solid #333; border-radius: 12px; }
+        .card-header { background-color: #1a1a1a; border-bottom: 1px solid #333; }
+        .table-dark { background-color: #0a0a0a; }
+        .table-dark td, .table-dark th { border-color: #333; }
+        .role-badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .role-admin { background-color: #dc3545; }
+        .role-director { background-color: #fd7e14; }
+        .role-department_head { background-color: #20c997; }
+        .role-team_leader { background-color: #0dcaf0; color: #000; }
+        .role-employee { background-color: #6c757d; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1100; }
+        .stat-card { background-color: #0a0a0a; border: 1px solid #333; border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #007bff; }
+        .theme-toggle { cursor: pointer; padding: 5px 12px; background-color: #1a1a1a; border-radius: 20px; }
+        footer { border-top: 1px solid #333; }
+        .btn-sm { margin: 2px; }
+        .search-input { background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 20px; padding: 8px 16px; width: 100%; max-width: 300px; }
+        .search-input:focus { background-color: #2a2a2a; color: #fff; outline: none; border-color: #007bff; }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <h1>🏢 HRM System</h1>
-                <p>Quản lý nhân sự chuyên nghiệp</p>
-            </div>
-            <div class="user-info">
-                <span>👋 Xin chào, <span id="userName">Admin</span></span>
-                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+    <div class="toast-container"></div>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🏢 HRM - Quản lý nhân sự</a>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <div class="theme-toggle" id="themeToggle">🌙</div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                        👤 <span id="userNameDisplay">Đang tải...</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="showMyProfile()">📋 Hồ sơ của tôi</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showMySalary()">💰 Lương của tôi</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showMyAttendance()">⏱️ Chấm công của tôi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">🚪 Đăng xuất</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <!-- Content -->
-        <div class="content">
-            <!-- Search Section -->
-            <div class="search-section">
-                <div class="search-title">🔍 Tìm kiếm người dùng</div>
-                <div class="search-box">
-                    <input type="text" id="searchInput" class="search-input"
-                        placeholder="Nhập HỌ TÊN, EMAIL hoặc SĐT để tìm kiếm...">
-                    
-                    <select id="departmentSelect" class="department-select">
-                        <option value="">Tất cả phòng ban</option>
-                        <option value="Phòng Kỹ thuật">🔧 Phòng Kỹ thuật</option>
-                        <option value="Phòng Nhân sự">👥 Phòng Nhân sự</option>
-                        <option value="Phòng Kinh doanh">📈 Phòng Kinh doanh</option>
-                        <option value="Phòng Kế toán">💰 Phòng Kế toán</option>
-                        <option value="Phòng Marketing">📢 Phòng Marketing</option>
-                        <option value="Phòng Hành chính">📋 Phòng Hành chính</option>
-                        <option value="Phòng IT">💻 Phòng IT</option>
-                    </select>
-                    
-                    <button class="search-btn" onclick="searchUsers()">Tìm kiếm</button>
-                    <button class="reset-btn" onclick="resetSearch()">Đặt lại</button>
-                </div>
-                <div class="search-hint">
-                    <span>💡 Tìm theo tên: "Nguyễn Văn A"</span>
-                    <span>📧 Tìm theo email: "example@company.com"</span>
-                    <span>📱 Tìm theo SĐT: "0912345678"</span>
-                    <span>🏢 Lọc theo phòng ban: Chọn từ danh sách</span>
-                    <span>🔍 Có thể kết hợp tất cả</span>
-                </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-2">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" onclick="showDashboard()">📊 Dashboard</a></li>
+                    <li class="nav-item" id="menuEmployees" style="display: none;"><a class="nav-link" onclick="showEmployees()">👥 Quản lý nhân viên</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="showMySalary()">💰 Lương của tôi</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="showMyAttendance()">⏱️ Chấm công</a></li>
+                    <li class="nav-item" id="menuAdmin" style="display: none;"><a class="nav-link" onclick="showAdminPanel()">⚙️ Quản trị</a></li>
+                </ul>
             </div>
-
-            <!-- Stats -->
-            <div class="stats">
-                <div class="total-users">📊 Tổng số người dùng: <span id="totalUsers">0</span></div>
-                <div class="result-count">🔎 Kết quả tìm thấy: <span id="resultCount">0</span></div>
-            </div>
-
-            <!-- User Table -->
-            <div class="table-container">
-                <table id="userTable">
-                    <thead>
-                        <tr>
-                            <th>Họ và tên</th>
-                            <th>Email</th>
-                            <th>Số điện thoại</th>
-                            <th>Phòng ban</th>
-                            <th>Trạng thái</th>
-                        </thead>
-                    <tbody id="userTableBody">
-                        <tr class="empty-row">
-                            <td colspan="5">
-                                <div class="loading">Đang tải dữ liệu...</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 p-4">
+                <div id="mainContent">
+                    <div class="text-center mt-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Đang tải dữ liệu...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
+    
+    <footer class="text-center py-3">
+        CopyRight © 2026 Nguyễn Tấn Vĩnh - Lê Đức Trọng
+    </footer>
+    
+    <!-- Modals -->
+    <div class="modal fade" id="profileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hồ sơ cá nhân</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="profileContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="attendanceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chấm công</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button class="btn btn-success w-100 mb-2" onclick="checkIn()">✅ Chấm công VÀO</button>
+                    <button class="btn btn-danger w-100" onclick="checkOut()">❌ Chấm công RA</button>
+                    <div id="attendanceStatus" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Biến lưu trữ dữ liệu
-        let allUsers = [];
-        let currentUsers = [];
-
-        // Hàm hiển thị danh sách người dùng ra bảng
-        function renderUsers(users) {
-            const tbody = document.getElementById('userTableBody');
-            const resultCountSpan = document.getElementById('resultCount');
-
-            if (!tbody) return;
-
-            if (!users || users.length === 0) {
-                tbody.innerHTML = '<tr class="empty-row"><td colspan="5">📭 Không tìm thấy người dùng nào</td></tr>';
-                if (resultCountSpan) resultCountSpan.textContent = '0';
+        // ============== GLOBAL ==============
+        let currentUser = null;
+        let usersList = [];
+        let attendanceRecords = JSON.parse(localStorage.getItem('attendance') || '[]');
+        let changeHistory = JSON.parse(localStorage.getItem('changeHistory') || '[]');
+        
+        // ============== UTILITIES ==============
+        function showToast(message, type = 'success') {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const id = 'toast_' + Date.now();
+            const bg = type === 'error' ? 'bg-danger' : (type === 'warning' ? 'bg-warning' : 'bg-success');
+            const html = `<div id="${id}" class="toast align-items-center ${bg} text-white border-0 mb-2 show" role="alert"><div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            setTimeout(() => document.getElementById(id)?.remove(), 3000);
+        }
+        
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+        
+        function getRoleName(role) {
+            const names = { admin: 'Admin', director: 'Giám đốc', department_head: 'Trưởng phòng', team_leader: 'Trưởng nhóm', employee: 'Nhân viên' };
+            return names[role] || role;
+        }
+        
+        function addToHistory(action, details) {
+            changeHistory.unshift({
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                userName: currentUser?.fullName || 'Unknown',
+                action: action,
+                details: details
+            });
+            if (changeHistory.length > 100) changeHistory.pop();
+            localStorage.setItem('changeHistory', JSON.stringify(changeHistory));
+        }
+        
+        // ============== AUTH ==============
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/me', { credentials: 'include' });
+                if (res.ok) {
+                    currentUser = await res.json();
+                    document.getElementById('userNameDisplay').innerText = currentUser.fullName;
+                    
+                    // Hiển thị menu theo quyền
+                    const canManageEmployees = ['admin', 'director', 'department_head'].includes(currentUser.role);
+                    document.getElementById('menuEmployees').style.display = canManageEmployees ? 'block' : 'none';
+                    document.getElementById('menuAdmin').style.display = currentUser.role === 'admin' ? 'block' : 'none';
+                    
+                    await loadUsers();
+                    showDashboard();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/index.html';
+            }
+        }
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+            window.location.href = '/index.html';
+        });
+        
+        // ============== LOAD USERS ==============
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/users', { credentials: 'include' });
+                if (res.ok) usersList = await res.json();
+            } catch (error) { console.error('Load users error:', error); }
+        }
+        
+        // ============== DASHBOARD (cho tất cả user) ==============
+        async function showDashboard() {
+            const main = document.getElementById('mainContent');
+            main.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 mb-3"><div class="stat-card"><div class="stat-value" id="mySalary">0</div><div>Lương của tôi</div></div></div>
+                    <div class="col-md-4 mb-3"><div class="stat-card"><div class="stat-value" id="myAttendance">0</div><div>Chấm công tháng này</div></div></div>
+                    <div class="col-md-4 mb-3"><div class="stat-card"><div class="stat-value" id="totalEmployees">0</div><div>Tổng nhân viên</div></div></div>
+                </div>
+                <div class="card mt-3"><div class="card-header">📋 Hoạt động gần đây</div><div class="card-body" id="recentList"></div></div>
+            `;
+            
+            // Hiển thị tổng số nhân viên
+            document.getElementById('totalEmployees').innerText = usersList.length;
+            
+            // Hiển thị lương cá nhân
+            try {
+                const salaryRes = await fetch(`/api/salary/${currentUser.id}`, { credentials: 'include' });
+                const salaryData = await salaryRes.json();
+                document.getElementById('mySalary').innerHTML = formatCurrency(salaryData.salary || 0);
+            } catch(e) { document.getElementById('mySalary').innerHTML = formatCurrency(4500000); }
+            
+            // Hiển thị số lần chấm công trong tháng
+            const currentMonth = new Date().getMonth();
+            const monthlyAttendance = attendanceRecords.filter(r => r.userId === currentUser.id && new Date(r.date).getMonth() === currentMonth);
+            document.getElementById('myAttendance').innerText = monthlyAttendance.length;
+            
+            // Hiển thị lịch sử
+            const recent = changeHistory.slice(0, 5);
+            document.getElementById('recentList').innerHTML = recent.length ? recent.map(h => `<div class="border-bottom border-secondary pb-2 mb-2">📅 ${new Date(h.timestamp).toLocaleString()} - <strong>${h.userName}</strong> đã ${h.action}</div>`).join('') : '<div class="text-muted">Chưa có hoạt động</div>';
+        }
+        
+        // ============== MY PROFILE ==============
+        function showMyProfile() {
+            const content = document.getElementById('profileContent');
+            content.innerHTML = `
+                <div class="text-center"><div style="font-size: 64px;">👤</div><h4>${currentUser.fullName}</h4><p class="text-muted">${currentUser.email}</p></div>
+                <div class="mb-3"><label>Họ tên</label><input type="text" id="profileName" class="form-control bg-dark text-white" value="${currentUser.fullName}"></div>
+                <div class="mb-3"><label>Vai trò</label><input type="text" class="form-control bg-dark text-white" value="${getRoleName(currentUser.role)}" disabled></div>
+                <div class="mb-3"><label>Loại nhân viên</label>
+                    <select id="profileJobType" class="form-select bg-dark text-white">
+                        <option value="van_phong" ${currentUser.jobType === 'van_phong' ? 'selected' : ''}>Văn phòng</option>
+                        <option value="kinh_doanh" ${currentUser.jobType === 'kinh_doanh' ? 'selected' : ''}>Kinh doanh</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100" onclick="updateProfile()">Cập nhật hồ sơ</button>
+            `;
+            new bootstrap.Modal(document.getElementById('profileModal')).show();
+        }
+        
+        async function updateProfile() {
+            const newName = document.getElementById('profileName').value;
+            const newJobType = document.getElementById('profileJobType').value;
+            const res = await fetch(`/api/profile/${currentUser.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName: newName, jobType: newJobType }),
+                credentials: 'include'
+            });
+            if (res.ok) {
+                currentUser.fullName = newName;
+                currentUser.jobType = newJobType;
+                document.getElementById('userNameDisplay').innerText = newName;
+                showToast('Cập nhật hồ sơ thành công');
+                bootstrap.Modal.getInstance(document.getElementById('profileModal')).hide();
+                addToHistory('cập nhật hồ sơ', { name: newName });
+            } else showToast('Cập nhật thất bại', 'error');
+        }
+        
+        // ============== MY SALARY ==============
+        async function showMySalary() {
+            const main = document.getElementById('mainContent');
+            main.innerHTML = `<h3>💰 Bảng lương của tôi</h3><div class="card"><div class="card-body text-center" id="mySalaryDetail"><div class="spinner-border"></div> Đang tính...</div></div>`;
+            
+            try {
+                const res = await fetch(`/api/salary/${currentUser.id}`, { credentials: 'include' });
+                const data = await res.json();
+                
+                const bonus = data.bonus || 0;
+                const commission = data.commission || 0;
+                const seniorityBonus = 4500000 * currentUser.seniorityYears * 0.03;
+                
+                document.getElementById('mySalaryDetail').innerHTML = `
+                    <table class="table table-dark">
+                        <tr><td>Lương cơ bản</td><td class="text-end">${formatCurrency(4500000)}</td></tr>
+                        <tr><td>Hệ số lương (${currentUser.coefficient})</td><td class="text-end">${formatCurrency(4500000 * currentUser.coefficient)}</td></tr>
+                        <tr><td>Thâm niên (${currentUser.seniorityYears} năm x 3%)</td><td class="text-end">${formatCurrency(seniorityBonus)}</td></tr>
+                        ${bonus > 0 ? `<tr><td>Thưởng</td><td class="text-end">${formatCurrency(bonus)}</td></tr>` : ''}
+                        ${commission > 0 ? `<tr><td>Hoa hồng (5% doanh thu)</td><td class="text-end">${formatCurrency(commission)}</td></tr>` : ''}
+                        <tr class="table-success"><td><strong>Tổng lương</strong></td><td class="text-end fw-bold">${formatCurrency(data.salary)}</td></tr>
+                    </table>
+                    <button class="btn btn-primary mt-2" onclick="requestSalaryAdvance()">💰 Yêu cầu tạm ứng lương</button>
+                `;
+            } catch(e) {
+                document.getElementById('mySalaryDetail').innerHTML = '<div class="alert alert-danger">Lỗi tải dữ liệu lương</div>';
+            }
+        }
+        
+        function requestSalaryAdvance() {
+            showToast('Yêu cầu tạm ứng đã được gửi đến quản lý', 'info');
+            addToHistory('yêu cầu tạm ứng lương', { amount: 2000000 });
+        }
+        
+        // ============== ATTENDANCE ==============
+        function showMyAttendance() {
+            const main = document.getElementById('mainContent');
+            const todayStatus = getTodayStatus();
+            main.innerHTML = `
+                <h3>⏱️ Chấm công</h3>
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div style="font-size: 48px;">${todayStatus.hasCheckedIn ? '✅' : '⏰'}</div>
+                                <h5>${todayStatus.hasCheckedIn ? (todayStatus.hasCheckedOut ? 'Đã hoàn thành' : 'Đã chấm công vào') : 'Chưa chấm công'}</h5>
+                                ${todayStatus.checkInTime ? `<p>Vào lúc: ${todayStatus.checkInTime}</p>` : ''}
+                                ${todayStatus.checkOutTime ? `<p>Ra lúc: ${todayStatus.checkOutTime}</p>` : ''}
+                                <div class="mt-3">
+                                    <button class="btn btn-success me-2" onclick="openAttendanceModal()" ${todayStatus.hasCheckedIn ? 'disabled' : ''}>✅ Chấm công vào</button>
+                                    <button class="btn btn-danger" onclick="checkOut()" ${!todayStatus.hasCheckedIn || todayStatus.hasCheckedOut ? 'disabled' : ''}>❌ Chấm công ra</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card"><div class="card-header">📅 Lịch sử chấm công (30 ngày gần nhất)</div><div class="card-body" id="attendanceHistoryList"></div></div>
+                    </div>
+                </div>
+            `;
+            loadAttendanceHistory();
+        }
+        
+        function getTodayStatus() {
+            const today = new Date().toISOString().split('T')[0];
+            const record = attendanceRecords.find(r => r.userId === currentUser.id && r.date === today);
+            return {
+                hasCheckedIn: !!record?.checkIn,
+                hasCheckedOut: !!record?.checkOut,
+                checkInTime: record?.checkIn,
+                checkOutTime: record?.checkOut
+            };
+        }
+        
+        function openAttendanceModal() {
+            document.getElementById('attendanceStatus').innerHTML = '';
+            new bootstrap.Modal(document.getElementById('attendanceModal')).show();
+        }
+        
+        function checkIn() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const existing = attendanceRecords.find(r => r.userId === currentUser.id && r.date === today);
+            
+            if (existing?.checkIn) {
+                showToast('Bạn đã chấm công vào hôm nay rồi!', 'warning');
+                bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
                 return;
             }
-
-            tbody.innerHTML = users.map(user => `
+            
+            if (existing) {
+                existing.checkIn = now.toLocaleTimeString('vi-VN');
+            } else {
+                attendanceRecords.push({ userId: currentUser.id, date: today, checkIn: now.toLocaleTimeString('vi-VN'), checkOut: null });
+            }
+            
+            localStorage.setItem('attendance', JSON.stringify(attendanceRecords));
+            addToHistory('chấm công vào', { date: today, time: now.toLocaleTimeString('vi-VN') });
+            showToast(`Chấm công vào lúc ${now.toLocaleTimeString('vi-VN')} thành công`, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
+            showMyAttendance();
+        }
+        
+        function checkOut() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const record = attendanceRecords.find(r => r.userId === currentUser.id && r.date === today);
+            
+            if (!record || !record.checkIn) {
+                showToast('Bạn chưa chấm công vào hôm nay!', 'warning');
+                bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
+                return;
+            }
+            if (record.checkOut) {
+                showToast('Bạn đã chấm công ra rồi!', 'warning');
+                bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
+                return;
+            }
+            
+            record.checkOut = now.toLocaleTimeString('vi-VN');
+            localStorage.setItem('attendance', JSON.stringify(attendanceRecords));
+            addToHistory('chấm công ra', { date: today, time: now.toLocaleTimeString('vi-VN') });
+            showToast(`Chấm công ra lúc ${now.toLocaleTimeString('vi-VN')} thành công`, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('attendanceModal')).hide();
+            showMyAttendance();
+        }
+        
+        function loadAttendanceHistory() {
+            const historyDiv = document.getElementById('attendanceHistoryList');
+            if (!historyDiv) return;
+            
+            const userRecords = attendanceRecords.filter(r => r.userId === currentUser.id).slice(0, 30);
+            if (userRecords.length === 0) {
+                historyDiv.innerHTML = '<div class="text-muted text-center">Chưa có dữ liệu chấm công</div>';
+                return;
+            }
+            historyDiv.innerHTML = userRecords.map(r => `
+                <div class="border-bottom border-secondary pb-2 mb-2">
+                    <strong>📅 ${r.date}</strong>
+                    <div>🕐 Vào: ${r.checkIn || '--'} | 🚪 Ra: ${r.checkOut || '--'}</div>
+                </div>
+            `).join('');
+        }
+        
+        // ============== EMPLOYEES MANAGEMENT (có thêm tìm kiếm) ==============
+        // Biến lưu từ khóa tìm kiếm hiện tại
+        let currentSearchTerm = '';
+        
+        async function showEmployees() {
+            if (!['admin', 'director', 'department_head'].includes(currentUser?.role)) {
+                showToast('Bạn không có quyền truy cập', 'error');
+                showDashboard();
+                return;
+            }
+            
+            // Đảm bảo danh sách nhân viên đã được tải
+            if (usersList.length === 0) await loadUsers();
+            
+            const main = document.getElementById('mainContent');
+            main.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h3>👥 Danh sách nhân viên</h3>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="employeeSearchInput" class="search-input" placeholder="🔍 Tìm theo tên hoặc email ..." value="${currentSearchTerm}">
+                        <button class="btn btn-primary" onclick="openUserModal()">➕ Thêm nhân viên</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark">
+                        <thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Loại</th><th>Hệ số</th><th>Thao tác</th></tr></thead>
+                        <tbody id="usersTable"></tbody>
+                    </table>
+                </div>
+            `;
+            
+            // Gắn sự kiện lọc khi gõ
+            const searchInput = document.getElementById('employeeSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentSearchTerm = e.target.value;
+                    renderFilteredUsers();
+                });
+            }
+            
+            // Hiển thị danh sách đã lọc
+            renderFilteredUsers();
+        }
+        
+        // Hàm lọc và render danh sách nhân viên
+        function renderFilteredUsers() {
+            const tbody = document.getElementById('usersTable');
+            if (!tbody) return;
+            
+            // Lọc theo tên hoặc email (không phân biệt chữ hoa/thường)
+            const term = currentSearchTerm.trim().toLowerCase();
+            let filtered = [...usersList];
+            if (term !== '') {
+                filtered = usersList.filter(user => 
+                    user.fullName.toLowerCase().includes(term) || 
+                    user.email.toLowerCase().includes(term)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Không tìm thấy nhân viên nào</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map((u, idx) => `
                 <tr>
-                    <td><strong>${user.fullname || 'Chưa cập nhật'}</strong></td>
-                    <td>${user.email || 'Chưa cập nhật'}</td>
-                    <td>${user.phone || 'Chưa cập nhật'}</td>
+                    <td>${idx+1}</td>
+                    <td>${escapeHtml(u.fullName)}</td>
+                    <td>${escapeHtml(u.email)}</td>
+                    <td><span class="role-badge role-${u.role}">${getRoleName(u.role)}</span></td>
+                    <td>${u.jobType === 'kinh_doanh' ? '📈 Kinh doanh' : '📄 Văn phòng'}</td>
+                    <td>${u.coefficient}</td>
                     <td>
-                        <span style="background: #e3f2fd; padding: 4px 10px; border-radius: 12px; font-size: 12px;">
-                            🏢 ${user.department || 'Chưa cập nhật'}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge ${user.status === 'active' ? 'badge-active' : 'badge-inactive'}">
-                            ${user.status === 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động'}
-                        </span>
+                        <button class="btn btn-sm btn-info" onclick="viewSalary('${u._id}')">💰</button>
+                        <button class="btn btn-sm btn-warning" onclick="editUser('${u._id}')">✏️</button>
+                        ${currentUser?.role === 'admin' ? `<button class="btn btn-sm btn-danger" onclick="deleteUser('${u._id}')">🗑️</button>` : ''}
                     </td>
                 </tr>
             `).join('');
-
-            if (resultCountSpan) resultCountSpan.textContent = users.length;
         }
-
-        // Cập nhật tổng số người dùng
-        function updateTotalUsers() {
-            const totalUsersSpan = document.getElementById('totalUsers');
-            if (totalUsersSpan && allUsers) {
-                totalUsersSpan.textContent = allUsers.length;
-            }
-        }
-
-        // Lấy danh sách phòng ban duy nhất từ dữ liệu
-        function updateDepartmentFilter() {
-            if (!allUsers || allUsers.length === 0) return;
-
-            const departments = [...new Set(allUsers.map(user => user.department).filter(dept => dept))];
-            const select = document.getElementById('departmentSelect');
-
-            // Thêm các phòng ban từ dữ liệu (nếu chưa có)
-            departments.forEach(dept => {
-                if (dept && !Array.from(select.options).some(opt => opt.value === dept)) {
-                    const option = document.createElement('option');
-                    option.value = dept;
-                    option.textContent = dept;
-                    select.appendChild(option);
-                }
+        
+        // Hàm đơn giản chống XSS khi hiển thị
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
             });
         }
-
-        // Chức năng tìm kiếm (tìm theo TÊN, EMAIL, SĐT và lọc theo PHÒNG BAN)
-        function searchUsers() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            const selectedDepartment = document.getElementById('departmentSelect').value;
-
-            let filtered = [...allUsers];
-
-            // Lọc theo từ khóa (tên, email hoặc số điện thoại)
-            if (keyword !== '') {
-                filtered = filtered.filter(user =>
-                    (user.fullname && user.fullname.toLowerCase().includes(keyword)) ||
-                    (user.email && user.email.toLowerCase().includes(keyword)) ||
-                    (user.phone && user.phone.includes(keyword))  // Tìm theo số điện thoại
-                );
+        
+        function openUserModal(id = null) {
+            const modal = document.getElementById('userModal');
+            if (!modal) {
+                // Tạo modal nếu chưa có
+                const modalHtml = `
+                    <div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content bg-dark text-white">
+                        <div class="modal-header"><h5 class="modal-title" id="modalTitle">Nhân viên</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                        <div class="modal-body"><form id="userForm"><input type="hidden" id="userId"><div class="mb-2"><input type="text" id="fullName" class="form-control bg-dark text-white" placeholder="Họ tên"></div>
+                        <div class="mb-2"><input type="email" id="email" class="form-control bg-dark text-white" placeholder="Email"></div>
+                        <div class="mb-2"><input type="password" id="password" class="form-control bg-dark text-white" placeholder="Mật khẩu"></div>
+                        <div class="mb-2"><select id="role" class="form-select bg-dark text-white"><option value="employee">Nhân viên</option><option value="team_leader">Trưởng nhóm</option><option value="department_head">Trưởng phòng</option><option value="director">Giám đốc</option></select></div>
+                        <div class="mb-2"><select id="jobType" class="form-select bg-dark text-white"><option value="van_phong">Văn phòng</option><option value="kinh_doanh">Kinh doanh</option></select></div>
+                        <div class="mb-2"><input type="number" id="coefficient" class="form-control bg-dark text-white" placeholder="Hệ số" value="2.2"></div>
+                        <div class="mb-2"><input type="number" id="seniorityYears" class="form-control bg-dark text-white" placeholder="Năm KN" value="0"></div></form></div>
+                        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button><button class="btn btn-primary" onclick="saveUser()">Lưu</button></div>
+                    </div></div></div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
             }
-
-            // Lọc theo phòng ban
-            if (selectedDepartment !== '') {
-                filtered = filtered.filter(user => user.department === selectedDepartment);
-            }
-
-            currentUsers = filtered;
-            renderUsers(currentUsers);
-        }
-
-        // Đặt lại tìm kiếm
-        function resetSearch() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('departmentSelect').value = '';
-            currentUsers = [...allUsers];
-            renderUsers(currentUsers);
-        }
-
-        // Tìm kiếm khi nhấn Enter
-        function setupEventListeners() {
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') {
-                        searchUsers();
-                    }
-                });
-            }
-
-            const departmentSelect = document.getElementById('departmentSelect');
-            if (departmentSelect) {
-                departmentSelect.addEventListener('change', function () {
-                    searchUsers();
-                });
-            }
-        }
-
-        // Đăng xuất
-        function logout() {
-            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                window.location.href = '/';
-            }
-        }
-
-        // Tải dữ liệu từ API (LẤY DỮ LIỆU THẬT, KHÔNG TỰ ĐỘNG THÊM)
-        async function loadUsersFromAPI() {
-            try {
-                const tbody = document.getElementById('userTableBody');
-                if (tbody) {
-                    tbody.innerHTML = '<tr class="empty-row"><td colspan="5"><div class="loading">Đang tải dữ liệu từ hệ thống...</div></td></tr>';
+            
+            if (id) {
+                const u = usersList.find(x => x._id === id);
+                if (u) {
+                    document.getElementById('userId').value = u._id;
+                    document.getElementById('fullName').value = u.fullName;
+                    document.getElementById('email').value = u.email;
+                    document.getElementById('role').value = u.role;
+                    document.getElementById('jobType').value = u.jobType;
+                    document.getElementById('coefficient').value = u.coefficient;
+                    document.getElementById('seniorityYears').value = u.seniorityYears;
+                    document.getElementById('modalTitle').innerText = 'Sửa nhân viên';
                 }
-
-                // Gọi API lấy danh sách người dùng
-                const response = await fetch('/api/users');
-
-                if (response.ok) {
-                    const data = await response.json();
-                    // Giả sử API trả về mảng users
-                    allUsers = Array.isArray(data) ? data : (data.users || []);
-                    currentUsers = [...allUsers];
-                    renderUsers(currentUsers);
-                    updateTotalUsers();
-                    updateDepartmentFilter();
-                } else {
-                    // Nếu API thất bại, hiển thị thông báo lỗi
-                    throw new Error('Không thể tải dữ liệu từ server');
-                }
-            } catch (error) {
-                console.error('Lỗi khi tải dữ liệu:', error);
-                const tbody = document.getElementById('userTableBody');
-                if (tbody) {
-                    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">⚠️ Không thể kết nối đến máy chủ. Vui lòng thử lại sau.</td></tr>';
-                }
+            } else {
+                document.getElementById('userForm')?.reset();
+                document.getElementById('userId').value = '';
+                document.getElementById('modalTitle').innerText = 'Thêm nhân viên';
+            }
+            new bootstrap.Modal(document.getElementById('userModal')).show();
+        }
+        
+        function editUser(id) { openUserModal(id); }
+        
+        async function saveUser() {
+            const userId = document.getElementById('userId').value;
+            const data = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                role: document.getElementById('role').value,
+                jobType: document.getElementById('jobType').value,
+                coefficient: parseFloat(document.getElementById('coefficient').value),
+                seniorityYears: parseFloat(document.getElementById('seniorityYears').value)
+            };
+            const pwd = document.getElementById('password').value;
+            if (pwd) data.password = pwd;
+            
+            const url = userId ? `/api/users/${userId}` : '/api/users';
+            const method = userId ? 'PUT' : 'POST';
+            const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include' });
+            if (res.ok) {
+                showToast(userId ? 'Cập nhật thành công' : 'Thêm thành công');
+                bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+                await loadUsers();
+                // Giữ nguyên từ khóa tìm kiếm sau khi refresh
+                showEmployees();
+                addToHistory(userId ? 'cập nhật nhân viên' : 'thêm nhân viên', data);
+            } else showToast('Lỗi khi lưu', 'error');
+        }
+        
+        async function deleteUser(id) {
+            if (!confirm('Xóa nhân viên này?')) return;
+            const res = await fetch(`/api/users/${id}`, { method: 'DELETE', credentials: 'include' });
+            if (res.ok) {
+                showToast('Xóa thành công');
+                await loadUsers();
+                showEmployees();
+                addToHistory('xóa nhân viên', { id });
+            } else showToast('Xóa thất bại', 'error');
+        }
+        
+        async function viewSalary(userId) {
+            const res = await fetch(`/api/salary/${userId}`, { credentials: 'include' });
+            const data = await res.json();
+            showToast(`Lương: ${formatCurrency(data.salary)}`, 'info');
+        }
+        
+        // ============== ADMIN PANEL ==============
+        function showAdminPanel() {
+            if (currentUser?.role !== 'admin') {
+                showToast('Bạn không có quyền truy cập', 'error');
+                showDashboard();
+                return;
+            }
+            const main = document.getElementById('mainContent');
+            main.innerHTML = `
+                <h3>⚙️ Quản trị hệ thống</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3"><div class="card"><div class="card-header">📊 Thống kê</div><div class="card-body"><p>Tổng nhân viên: ${usersList.length}</p><p>Lịch sử thay đổi: ${changeHistory.length}</p></div></div></div>
+                    <div class="col-md-6 mb-3"><div class="card"><div class="card-header">🛡️ Bảo mật</div><div class="card-body"><p>✅ Chống SQL/NoSQL Injection</p><p>✅ XSS Protection</p><p>✅ Session HTTPOnly</p></div></div></div>
+                </div>
+                <button class="btn btn-warning" onclick="clearHistory()">🗑️ Xóa lịch sử</button>
+            `;
+        }
+        
+        function clearHistory() {
+            if (confirm('Xóa toàn bộ lịch sử?')) {
+                changeHistory = [];
+                localStorage.setItem('changeHistory', '[]');
+                showToast('Đã xóa lịch sử', 'success');
+                showAdminPanel();
             }
         }
-
-        // Khởi tạo trang
-        async function init() {
-            await loadUsersFromAPI();
-            setupEventListeners();
-        }
-
-        // Chạy khi trang load xong
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        
+        // ============== THEME ==============
+        let isDark = true;
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            isDark = !isDark;
+            document.body.style.backgroundColor = isDark ? '#000' : '#f0f0f0';
+            document.body.style.color = isDark ? '#fff' : '#000';
+            document.getElementById('themeToggle').innerHTML = isDark ? '🌙' : '☀️';
+        });
+        
+        // ============== INIT ==============
+        checkAuth();
     </script>
 </body>
-
 </html>
